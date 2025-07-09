@@ -31,6 +31,41 @@
       </default>
       <site size="0.001" rgba="0.5 0.5 0.5 0.3" group="4"/>
     </default>
+
+        <default class="2f140">
+      <mesh scale="0.001 0.001 0.001"/>
+      <general biastype="affine"/>
+
+      <joint axis="0 1 0"/>
+      <default class="driver">
+        <joint range="0 0.8" armature="0.005" damping="0.1" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
+      </default>
+      <default class="follower">
+        <joint range="-0.872664 0.872664"  solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
+      </default>
+      <default class="spring_link">
+        <joint range="-0.29670597283 0.8" stiffness="0.05 " springref="2.8" damping="0.125"/>
+      </default>
+      <default class="coupler">
+        <joint range="-1.57 1.57" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
+      </default>
+
+      <default class="visual_gripper">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/>
+      </default>
+      <default class="collision_gripper">
+        <geom type="mesh" group="3"/>
+        <default class="pad_box1">
+          <geom mass="0" type="box" pos="0 -0.0026 0.028125" size="0.011 0.004 0.009375" friction="0.7"
+            solimp="0.95 0.99 0.001" solref="0.004 1" priority="1" rgba="0.55 0.55 0.55 1"/>
+        </default>
+        <default class="pad_box2">
+          <geom mass="0" type="box" pos="0 -0.0026 0.009375" size="0.011 0.004 0.009375" friction="0.6"
+            solimp="0.95 0.99 0.001" solref="0.004 1" priority="1" rgba="0.45 0.45 0.45 1"/>
+        </default>
+      </default>
+    </default>
+
   </default>
   
   <asset>
@@ -59,6 +94,21 @@
     <mesh file="wrist2_1.obj"/>
     <mesh file="wrist2_2.obj"/>
     <mesh file="wrist3.obj"/>
+
+
+        <!-- gripper -->
+    <material name="metal" specular="0.5" shininess="0.25" rgba="0.58 0.58 0.58 1"/>
+    <material name="silicone" specular="0.5" shininess="0.25" rgba="0.1882 0.1882 0.1882 1"/>
+    <material name="gray" specular="0.5" shininess="0.25" rgba="0.4627 0.4627 0.4627 1"/>
+
+    <mesh class="2f140" name="base_mount" file="base_mount_zeroed.obj"/>
+    <mesh class="2f140" name="base" file="base_zeroed.obj"/>
+    <mesh class="2f140" name="driver" file="driver_zeroed.obj"/>
+    <mesh class="2f140" name="coupler" file="coupler_zeroed.obj"/>
+    <mesh class="2f140" name="follower" file="follower_zeroed.obj"/>
+    <mesh class="2f140" name="pad" file="pad_zeroed.obj"/>
+    <mesh class="2f140" name="spring_link" file="spring_link_zeroed.obj"/>
+
   </asset>
 
   <worldbody>
@@ -114,6 +164,84 @@
                   <geom class="eef_collision" size="0.032 0.023" pos="0 0.07 0" quat="1 1 0 0"/>
                   <site name="attachment_site" pos="0 0.09215 0" quat="-1 1 0 0"/>
                 </body>
+
+                   <body name="base_mount" pos="0 0.1 0.085" quat="0.7071 -0.7071 0 0" childclass="2f140">
+                    <geom class="visual_gripper" mesh="base_mount" material="black"/>
+                    <body name="base_gripper" pos="0 0 0.0038" quat="1 0 0 0">
+                    <geom class="visual_gripper" mesh="base" material="black"/>
+                    <geom class="collision_gripper" mesh="base"/>
+                    <site name="pinch" pos="0 0 0.145" type="sphere" group="5" rgba="0.9 0.9 0.9 1" size="0.005"/>
+        
+                    <!-- Right-hand side 4-bar linkage -->
+                    <!-- driver -->
+                    <body name="right_driver" pos=" -0.030601 0 0.054905">
+                      <joint name="right_driver_joint" class="driver" pos="0 0 0"/>
+                      <geom name="right_driver" class="visual" mesh="driver" material="gray"/>
+                      <geom class="collision_gripper" mesh="driver"/>
+
+                      <!-- coupler -->
+                        <body name="right_coupler" pos="-0.0315300 0 -0.003733">
+                        <!-- <joint name="right_coupler_joint" class="coupler" pos="0 0 0"/> -->
+                        <geom name="right_coupler" class="visual_gripper" mesh="coupler" material="black"/>
+                        <geom class="collision_gripper" mesh="coupler"/>
+                
+                            <!-- follower -->
+                            <body name="right_follower" pos="-0.015514 0 0.086289">
+                                <joint name="right_follower_joint" class="follower"  pos="-0.017901 0 -0.006515"/>
+                                <geom name="right_follower" class="visual_gripper" mesh="follower" material="black"/>
+                                <geom class="collision_gripper" mesh="follower"/>
+                        
+                                <!-- pad -->
+                                <body name="right_pad" pos="-0.0066 0 0.00625">
+                                    <geom name="right_pad" class="visual_gripper" mesh="pad"/>                
+                                    <geom class="collision_gripper" mesh="pad"/>  
+                                </body>
+                            </body>    
+                      </body>
+                    </body>
+                    <!-- spring -->
+                    <body name="right_spring_link" pos="-0.012700 0 0.061420">
+                      <joint name="right_spring_link_joint" class="spring_link" pos="0 0 0"/>
+                      <geom name="right_spring_link" class="visual_gripper" mesh="spring_link" material="black"/>
+                      <geom class="collision_gripper" mesh="spring_link"/>
+                    </body>
+
+                    <!-- left-hand side 4-bar linkage -->
+                    <!-- driver -->
+                    <body name="left_driver" pos=" 0.030601 0 0.054905" quat="0 0 0 1">
+                      <joint name="left_driver_joint" class="driver" pos="0 0 0" axis="0 1 0"  />
+                      <geom name="left_driver" class="visual_gripper" mesh="driver" material="gray" quat="1 0 0 0"/>
+                      <geom class="collision_gripper" mesh="driver"/>
+
+                      <!-- coupler -->
+                      <body name="left_coupler" pos="-0.0315300 0 -0.003733" quat="1 0 0 0">
+                        <!-- <joint name="left_coupler_joint" class="coupler" pos="0 0 0" axis="0 1 0"/> -->
+                        <geom name="left_coupler" class="visual_gripper" mesh="coupler" material="black" quat="1 0 0 0"/>
+                        <geom class="collision_gripper" mesh="coupler"/>
+
+                        <!-- follower -->
+                        <body name="left_follower" pos="-0.015514 0 0.086289" quat="1 0 0 0">
+                            <joint name="left_follower_joint" class="follower"  pos="-0.017901 0 -0.006515" axis="0 1 0"/>
+                            <geom name="left_follower" class="visual_gripper" mesh="follower" material="black" quat="1 0 0 0"/>
+                            <geom class="collision_gripper" mesh="follower"/>
+                        
+                            <body name="left_pad" pos="-0.0066 0 0.00625" quat="1 0 0 0">
+                                <geom name="left_pad" class="visual_gripper" mesh="pad" quat="1 0 0 0"/>  
+                                <geom class="collision_gripper" mesh="pad"/>              
+                            </body>
+                      </body>
+                
+                      </body>
+                    </body>
+                    <!-- spring -->
+                    <body name="left_spring_link" pos="0.012700 0 0.061420" quat="0 0 0 1">
+                      <joint name="left_spring_link_joint" class="spring_link" pos="0 0 0" axis="0 1 0"/>
+                      <geom name="left_spring_link" class="visual_gripper" mesh="spring_link" material="black" quat="1 0 0 0"/>
+                      <geom class="collision_gripper" mesh="spring_link"/>
+                    </body>
+
+                  </body>
+                </body>
               </body>
             </body>
           </body>
@@ -129,9 +257,25 @@
     <general class="size0" name="wrist_1" joint="wrist_1_joint"/>
     <general class="size0" name="wrist_2" joint="wrist_2_joint"/>
     <general class="size0" name="wrist_3" joint="wrist_3_joint"/>
+    <general class="2f140" name="fingers_actuator" tendon="split" forcerange="-5 5" ctrlrange="0 255" gainprm="0.3137255 0 0" biasprm="0 -100 -10"/>
   </actuator>
 
+    <!-- gripper tendon -->
+  <tendon>
+    <fixed name="split">
+      <joint joint="right_driver_joint" coef="0.5"/>
+      <joint joint="left_driver_joint" coef="0.5"/>
+    </fixed>
+  </tendon>
+  <!--gripper anchors for closed linkage -->
+  <equality>
+    <connect anchor="-0.0 0 0.0" body1="right_follower" body2="right_spring_link" solimp="0.95 0.99 0.001" solref="0.005 1" active="true"/>
+    <connect anchor="-0.0 0 0.0" body1="left_follower" body2="left_spring_link" solimp="0.95 0.99 0.001" solref="0.005 1" active="true"/>
+    <joint joint1="right_driver_joint" joint2="left_driver_joint" polycoef="0 1 0 0 0" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+  </equality>
+
   <keyframe>
-    <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0" ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0"/>
+    <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0"
+        ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
   </keyframe>
 </mujoco>
