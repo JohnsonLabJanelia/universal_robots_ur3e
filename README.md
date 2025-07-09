@@ -2,6 +2,9 @@
 
 Requires MuJoCo 2.3.3 or later.
 
+![image](https://github.com/user-attachments/assets/1b1a2c75-efe2-4ed7-9d46-e2affe78cadd)
+
+
 ## Overview
 
 This package contains a simplified robot description (MJCF) of the
