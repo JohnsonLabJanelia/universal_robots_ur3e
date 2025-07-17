@@ -32,7 +32,7 @@
       <site size="0.001" rgba="0.5 0.5 0.5 0.3" group="4"/>
     </default>
 
-        <default class="2f140">
+    <default class="2f140">
       <mesh scale="0.001 0.001 0.001"/>
       <general biastype="affine"/>
 
@@ -165,7 +165,7 @@
                   <site name="attachment_site" pos="0 0.09215 0" quat="-1 1 0 0"/>
                 </body>
 
-                   <body name="base_mount" pos="0 0.1 0.085" quat="0.7071 -0.7071 0 0" childclass="2f140">
+                    <body name="base_mount" pos="0 0.1 0.085" quat="0.7071 -0.7071 0 0" childclass="2f140">
                     <geom class="visual_gripper" mesh="base_mount" material="black"/>
                     <body name="base_gripper" pos="0 0 0.0038" quat="1 0 0 0">
                     <geom class="visual_gripper" mesh="base" material="black"/>
