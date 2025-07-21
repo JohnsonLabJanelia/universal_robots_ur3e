@@ -1,0 +1,15 @@
+<mujoco model="ur3e_rig">
+    <compiler angle="radian" meshdir="assets" autolimits="true"/>
+    <option integrator="implicitfast"/>
+
+    <include file="ur3e_meta.xml"/>
+
+<worldbody>
+    <geom name="table" type="cylinder" size="0.45085 0.005" pos="0 0 -0.005" rgba=".1 .5 .1 1"/>
+    
+    <body pos="-0.4 -0.4 0">
+        <include file="ur3e_body.xml"/>
+    </body>
+    <camera name="cam1" pos="0.5 0.0 0.5" xyaxes="1 0 0 0 0 1"/>
+</worldbody>
+</mujoco>

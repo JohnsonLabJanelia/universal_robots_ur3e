@@ -1,0 +1,163 @@
+<mujoco model="ur3e">
+
+  <default>
+    <default class="ur3e">
+      <material specular="0.5" shininess="0.25"/>
+      <joint axis="0 1 0" range="-6.28319 6.28319" armature="0.1"/>
+      <general gaintype="fixed" biastype="affine" ctrlrange="-6.2831 6.2831"/>
+      <default class="size2">
+        <general  gainprm="1000" biasprm="0 -1000 -200" forcerange="-56 56"/>
+      </default>
+      <default class="size1">
+        <default class="size1_limited">
+          <joint range="-3.14159 3.14159"/>
+          <general gainprm="500" biasprm="0 -500 -100" ctrlrange="-3.14159 3.14159" forcerange="-28 28"/>
+        </default>
+      </default>
+      <default class="size0">
+        <general gainprm="200" biasprm="0 -200 -40" forcerange="-12 12"/>
+      </default>
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/>
+      </default>
+      <default class="collision">
+        <geom type="capsule" group="3"/>
+        <default class="eef_collision">
+          <geom type="cylinder"/>
+        </default>
+      </default>
+      <site size="0.001" rgba="0.5 0.5 0.5 0.3" group="4"/>
+    </default>
+
+    <default class="2f85">
+      <mesh scale="0.001 0.001 0.001"/>
+      <general biastype="affine"/>
+
+      <joint axis="1 0 0"/>
+      <default class="driver">
+        <joint range="0 0.8" armature="0.005" damping="0.1" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
+      </default>
+      <default class="follower">
+        <joint range="-0.872664 0.872664" armature="0.001" pos="0 -0.018 0.0065" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
+      </default>
+      <default class="spring_link">
+        <joint range="-0.29670597283 0.8" armature="0.001" stiffness="0.05" springref="2.62" damping="0.00125"/>
+      </default>
+      <default class="coupler">
+        <joint range="-1.57 0" armature="0.001" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
+      </default>
+
+      <default class="visual_gripper">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/>
+      </default>
+      <default class="collision_gripper">
+        <geom type="mesh" group="3"/>
+        <default class="pad_box1">
+          <geom mass="0" type="box" pos="0 -0.0026 0.028125" size="0.011 0.004 0.009375" friction="0.7"
+            solimp="0.95 0.99 0.001" solref="0.004 1" priority="1" rgba="0.55 0.55 0.55 1"/>
+        </default>
+        <default class="pad_box2">
+          <geom mass="0" type="box" pos="0 -0.0026 0.009375" size="0.011 0.004 0.009375" friction="0.6"
+            solimp="0.95 0.99 0.001" solref="0.004 1" priority="1" rgba="0.45 0.45 0.45 1"/>
+        </default>
+      </default>
+    </default>
+    
+
+  </default>
+  
+  <asset>
+    <material class="ur3e" name="black" rgba="0.033 0.033 0.033 1"/>
+    <material class="ur3e" name="jointgray" rgba="0.278 0.278 0.278 1"/>
+    <material class="ur3e" name="linkgray" rgba="0.82 0.82 0.82 1"/>
+    <material class="ur3e" name="urblue" rgba="0.49 0.678 0.8 1"/>
+
+    <mesh file="base_0.obj"/>
+    <mesh file="base_1.obj"/>
+    <mesh file="shoulder_0.obj"/>
+    <mesh file="shoulder_1.obj"/>
+    <mesh file="shoulder_2.obj"/>
+    <mesh file="upperarm_0.obj"/>
+    <mesh file="upperarm_1.obj"/>
+    <mesh file="upperarm_2.obj"/>
+    <mesh file="upperarm_3.obj"/>
+    <mesh file="forearm_0.obj"/>
+    <mesh file="forearm_1.obj"/>
+    <mesh file="forearm_2.obj"/>
+    <mesh file="forearm_3.obj"/>
+    <mesh file="wrist1_0.obj"/>
+    <mesh file="wrist1_1.obj"/>
+    <mesh file="wrist1_2.obj"/>
+    <mesh file="wrist2_0.obj"/>
+    <mesh file="wrist2_1.obj"/>
+    <mesh file="wrist2_2.obj"/>
+    <mesh file="wrist3.obj"/>
+
+
+    <!-- gripper -->
+    <material name="metal" specular="0.5" shininess="0.25" rgba="0.58 0.58 0.58 1"/>
+    <material name="silicone" specular="0.5" shininess="0.25" rgba="0.1882 0.1882 0.1882 1"/>
+    <material name="gray" specular="0.5" shininess="0.25" rgba="0.4627 0.4627 0.4627 1"/>
+
+    <mesh class="2f85" name="base_mount" file="base_mount.stl"/>
+    <mesh class="2f85" name="base" file="base.stl"/>
+    <mesh class="2f85" name="driver" file="driver.stl"/>
+    <mesh class="2f85" name="coupler" file="coupler.stl"/>
+    <mesh class="2f85" name="follower" file="follower.stl"/>
+    <mesh class="2f85" name="pad" file="pad.stl"/>
+    <mesh class="2f85" name="spring_link" file="spring_link.stl"/>
+
+  </asset>
+
+
+  <contact>
+    <exclude body1="base_gripper" body2="left_driver"/>
+    <exclude body1="base_gripper" body2="right_driver"/>
+    <exclude body1="base_gripper" body2="left_spring_link"/>
+    <exclude body1="base_gripper" body2="right_spring_link"/>
+
+    <!-- <exclude body1="right_driver" body2="right_spring_link"/>     -->
+    <!-- <exclude body1="left_driver" body2="left_spring_link"/>     -->
+      
+    <!-- <exclude body1="right_driver" body2="right_follower"/>     -->
+    <!-- <exclude body1="right_spring_link" body2="right_follower"/>         -->
+    <exclude body1="right_coupler" body2="right_follower"/>
+
+    <!-- <exclude body1="left_driver" body2="left_follower"/>     -->
+    <!-- <exclude body1="left_spring_link" body2="left_follower"/>         -->
+    <exclude body1="left_coupler" body2="left_follower"/>
+
+  </contact>
+
+
+
+  <actuator>
+    <general class="size2" name="shoulder_pan" joint="shoulder_pan_joint"/>
+    <general class="size2" name="shoulder_lift" joint="shoulder_lift_joint"/>
+    <general class="size1_limited" name="elbow" joint="elbow_joint"/>
+    <general class="size0" name="wrist_1" joint="wrist_1_joint"/>
+    <general class="size0" name="wrist_2" joint="wrist_2_joint"/>
+    <general class="size0" name="wrist_3" joint="wrist_3_joint"/>
+    <general class="2f85" name="fingers_actuator" tendon="split" forcerange="-5 5" ctrlrange="0 255" gainprm="0.3137255 0 0" biasprm="0 -100 -10"/>
+  </actuator>
+
+    <!-- gripper tendon -->
+  <tendon>
+    <fixed name="split">
+      <joint joint="right_driver_joint" coef="0.5"/>
+      <joint joint="left_driver_joint" coef="0.5"/>
+    </fixed>
+  </tendon>
+
+  <!--gripper anchors for closed linkage -->
+  <equality>
+    <connect anchor="-0.0 0 0.0" body1="right_follower" body2="right_coupler" solimp="0.95 0.99 0.001" solref="0.005 1" />
+    <connect anchor="-0.0 0 0.0" body1="left_follower" body2="left_coupler" solimp="0.95 0.99 0.001" solref="0.005 1" />
+    <joint joint1="right_driver_joint" joint2="left_driver_joint" polycoef="0 1 0 0 0" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+  </equality>
+
+  <keyframe>
+    <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0  0 0 0 0 0"
+        ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
+  </keyframe>
+</mujoco>
