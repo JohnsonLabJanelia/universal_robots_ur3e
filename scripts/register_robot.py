@@ -19,7 +19,7 @@ def load_jarvis_3d_ball_csv(file_name, num_keypoints):
         for row in csv_reader:
             if line_count != 0:
                 if "NaN" not in row:
-                    keypoints = [float(x) for x in row[2:-1]]
+                    keypoints = [float(x) for x in row[2:]]
                     keypoints = np.asarray(keypoints)
                     keypoints = keypoints.reshape([num_keypoints, 3])
                     labels.append(keypoints)
@@ -32,26 +32,22 @@ labels = load_jarvis_3d_ball_csv(label_file, 1)
 
 ball_calibration = 1000 * np.asarray(
     [
-        [-0.6, -0.6, 0.08],
-        [0.0, -0.6, 0.08],
-        [0.6, -0.6, 0.08],
-        [0.6, -1.2, 0.08],
-        [-0.0, -1.2, 0.08],
-        [-0.6, -1.2, 0.08],
-        [-0.6, -1.2, 0.18],
-        [-0.6, -1.2, 0.28],
-        [-0.6, -1.2, 0.38],
+        [0.271902, 0.359436, 0.394134],
+        [0.431698, 0.315648, 0.408148],
+        [0.461963, 0.263889, 0.269816],
+        [0.418017, 0.499603, 0.299859],
+        [0.411305, 0.472677, 0.409867],
     ]
 )
 
 
-labels = labels.reshape((3, 9, 3))
+labels = labels.reshape((1, 5, 3))
 
 # todo: fit rotation matrix
-r_matrix_all = np.zeros([3, 3, 1])
+r_matrix_all = np.zeros([1, 3, 3])
 r_matrix_all[0] = np.eye(3, 3)
 
-t_vector_all = np.zeros([3, 1])
+t_vector_all = np.zeros([1, 3])
 for robot_idx in range(1):
     labels_per_robot = labels[robot_idx]
     t_vec = ball_calibration.T - np.matmul(
@@ -92,7 +88,7 @@ for robot_idx in range(1):
 # save config
 save_folder = args.save_folder
 robot_names = ["URB3"]
-for robot_idx in range(3):
+for robot_idx in range(1):
     data = {
         "rotation_matrix": r_matrix_all[robot_idx].T.tolist(),
         "tvec": t_vector_all[robot_idx].tolist(),
