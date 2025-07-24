@@ -96,3 +96,5 @@ for robot_idx in range(1):
     to_save = "{}/{}.json".format(save_folder, robot_names[robot_idx])
     with open(to_save, "w") as f:
         json.dump(data, f)
+
+
