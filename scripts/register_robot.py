@@ -113,6 +113,21 @@ robot_rotation_matrix = np.asarray(robot_config["rotation_matrix"]).T
 rig_robot = np.matmul(robot_rotation_matrix.T, robot_config["tvec"]) * (-1.0)
 
 pos = rig2mujoco_transform(rig_robot)
-angle = np.array([0, 0, 1, np.pi])
-s = f'<body pos="{pos[0]:.8f} {pos[1]:.8f} {pos[2]:.8f}" axisangle="{angle[0]:.8f} {angle[1]:.8f} {angle[2]:.8f} {angle[3]:.8f}"/>'
-print(s)
+axisangle = np.array([0, 0, 1, np.pi])  # 180° around Z
+filename = "ur3e_body.xml"
+
+
+def format_mujoco_body(pos, axisangle, filename, name=None, precision=8):
+    def fmt(vec):
+        return " ".join(f"{v:.{precision}f}" for v in vec)
+
+    name_attr = f' name="{name}"' if name else ""
+    return (
+        f'<body{name_attr} pos="{fmt(pos)}" axisangle="{fmt(axisangle)}">\n'
+        f'    <include file="{filename}"/>\n'
+        f"</body>"
+    )
+
+
+xml_snippet = format_mujoco_body(pos, axisangle, filename, name="ur3e_site")
+print(xml_snippet)
