@@ -14,7 +14,7 @@ label_file = args.label
 def rig2mujoco_transform(coord):
     rig2mujoco_r = np.asarray([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
     rig2mujoco_r = rig2mujoco_r.T  # c to python
-    rig2mujoco_tv = np.asarray([0, 0, 0])  # 349.25
+    rig2mujoco_tv = np.asarray([0, 0, 0])  #
     new_coord = np.matmul(rig2mujoco_r, coord) + rig2mujoco_tv
     return list(new_coord / 1000)
 
@@ -111,4 +111,5 @@ with open(to_save) as f:
 # get rig space tvec
 robot_rotation_matrix = np.asarray(robot_config["rotation_matrix"]).T
 rig_robot = np.matmul(robot_rotation_matrix.T, robot_config["tvec"]) * (-1.0)
-print(rig2mujoco_transform(rig_robot))
+robot_mujoco = rig2mujoco_transform(rig_robot)
+print([round(x, 6) for x in robot_mujoco])
