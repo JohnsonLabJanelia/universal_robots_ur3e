@@ -111,5 +111,8 @@ with open(to_save) as f:
 # get rig space tvec
 robot_rotation_matrix = np.asarray(robot_config["rotation_matrix"]).T
 rig_robot = np.matmul(robot_rotation_matrix.T, robot_config["tvec"]) * (-1.0)
-robot_mujoco = rig2mujoco_transform(rig_robot)
-print([round(x, 6) for x in robot_mujoco])
+
+pos = rig2mujoco_transform(rig_robot)
+angle = np.array([0, 0, 1, np.pi])
+s = f'<body pos="{pos[0]:.8f} {pos[1]:.8f} {pos[2]:.8f}" axisangle="{angle[0]:.8f} {angle[1]:.8f} {angle[2]:.8f} {angle[3]:.8f}"/>'
+print(s)
