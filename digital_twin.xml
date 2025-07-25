@@ -12,6 +12,9 @@
 
 <worldbody>
     <geom name="table" type="cylinder" size="0.45085 0.005" pos="0 0 -0.005" rgba=".1 .5 .1 1"/>
+    <body name="tennisball" pos = "0 0 0.2" mocap="true">
+        <geom type="sphere" size="0.045" rgba=".9 .9 0 1"/>
+    </body>
     
     <body name="ur3e_site" pos="-0.33745722 -0.40537438 -0.08204760" axisangle="0.00000000 0.00000000 1.00000000 3.14159265">
         <include file="ur3e_body.xml"/>
